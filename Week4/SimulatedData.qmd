@@ -1,0 +1,47 @@
+---
+title: "Healthcare Dataset"
+author: "Dr. Mighty Itauma Itauma"
+format: html
+editor: visual
+---
+
+## Dataset
+
+```{python}
+import pandas as pd
+import numpy as np
+
+np.set_printoptions(precision=2)
+
+# Set random seed for reproducibility
+np.random.seed(42)
+
+# Simulate a dataset with 200 patients
+num_samples = 200
+
+# Feature simulation
+exercise_time = np.random.normal(loc=30, scale=10, size=num_samples)  # daily exercise time in minutes
+healthy_meals = np.random.poisson(lam=3, size=num_samples)  # number of healthy meals per day
+sleep_hours = np.random.normal(loc=7, scale=1.5, size=num_samples)  # hours of sleep per night
+stress_level = np.random.randint(low=1, high=10, size=num_samples)  # stress level score (1-10)
+BMI = np.random.normal(loc=25, scale=5, size=num_samples)  # Body Mass Index
+
+# Simulated dataset
+data = {
+    'Exercise_Time_Min': exercise_time,
+    'Healthy_Meals_Per_Day': healthy_meals,
+    'Sleep_Hours_Per_Night': sleep_hours,
+    'Stress_Level': stress_level,
+    'BMI': BMI
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Save to CSV
+file_path = "simulated_health_wellness_data.csv"
+df.to_csv(file_path, index=False)
+
+file_path
+
+```

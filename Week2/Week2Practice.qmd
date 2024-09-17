@@ -1,0 +1,298 @@
+---
+title: "Supervised Learning - Regression"
+author: "Dr. Mighty Itauma"
+format: revealjs
+editor: visual
+---
+
+## What is Regression?
+
+The file "FuelConsumptionCo2.csv" contains data on fuel consumption and CO2 emissions for various car models. It includes information like the year, make, model, engine size, fuel type, and city/highway/combined fuel consumption. This data can be used to analyze trends in fuel efficiency and CO2 emissions across different car models and manufacturers.
+
+```{python}
+import pandas as pd
+import numpy as np
+
+# Read the CSV file
+df = pd.read_csv('FuelConsumptionCo2.csv')
+
+# Display the head of the dataframe
+print(df.head())
+```
+
+## Select Numerical Features and Target Variable
+
+```{python}
+# Select only the columns with float64 and int64 data types
+numerical_df = df.select_dtypes(include=['float64', 'int64'])
+
+# Display the head of the new dataframe
+print(numerical_df.head())
+```
+
+## Remove MODELYEAR variable
+
+```{python}
+# Remove MODELYEAR variable
+numerical_df = numerical_df.drop('MODELYEAR', axis=1)
+
+# Display the head of the updated dataframe
+print(numerical_df.head())
+```
+
+## What is a regression model?
+
+What is regression model?
+
+## Types of regression models
+
+-   Simple Regression
+
+    -   Simple Linear Regression
+
+    -   Simple Non-linear Regression
+
+-   Multiple Regression
+
+    -   Multiple Linear Regression
+
+    -   Multiple Non-Linear Regression
+
+Predict CO2Emissions vs Cylinders of all cars
+
+Predict CO2Emissions vs Cylinders and EngineSize of all cars
+
+## Applications of regression
+
+What are the applications of regression?
+
+## Regression algorithms
+
+-   Ordinal regression
+
+-   Poisson regression
+
+-   Linear, Polynomial, Lasso, Ridge regression
+
+-   Bayesian linear regression
+
+-   Neural network regression
+
+-   Decision forest regression
+
+-   Boosted decision tree regression
+
+-   KNN (K-nearest neighbors)
+
+## Simple Linear Regression
+
+Using linear regression to predict continuous values.
+
+```{python}
+#| echo: false
+from IPython.display import Markdown
+#from tabulate import tabulate
+
+#Markdown(tabulate(numerical_df.head(), headers=["ENGINESIZE", "CYLINDERS", "FUELCONSUMPTION_CITY", "FUELCONSUMPTION_HWY", "FUELCONSUMPTION_COMB", "FUELCONSUMPTION_COMB_MPG", "CO2EMISSIONS"]))
+```
+
+Target value should be continuous.
+
+## How does linear regression work?
+
+```{python}
+import plotly.express as px
+
+# Create a scatter plot using Plotly
+fig = px.scatter(numerical_df, x='ENGINESIZE', y='CO2EMISSIONS', 
+                 title='Scatter Plot of CO2 Emissions vs Engine Size',
+                 labels={'ENGINESIZE': 'Engine Size', 'CO2EMISSIONS': 'CO2 Emissions'})
+
+# Show the plot
+fig.show()
+```
+
+## How does linear regression work?
+
+```{python}
+import plotly.express as px
+
+# Create a scatter plot using Plotly
+fig = px.scatter(numerical_df, x='ENGINESIZE', y='CO2EMISSIONS', 
+                 title='Scatter Plot of CO2 Emissions vs Engine Size',
+                 labels={'ENGINESIZE': 'Engine Size', 'CO2EMISSIONS': 'CO2 Emissions'},
+                 trendline="ols")
+
+# Show the plot
+fig.show()
+```
+
+How do we use this line for prediction?
+
+How do we determine the best line to fit the data?
+
+What parameter within the model do we need to train to determine the best fit?
+
+## Estimating the parameters
+
+```{python}
+import statsmodels.api as sm
+# define response variable
+y = numerical_df['CO2EMISSIONS']
+# define explanatory variable
+x = numerical_df['ENGINESIZE']
+
+#add constant to predictor variables
+x = sm.add_constant(x)
+
+#fit linear regression model
+model = sm.OLS(y, x).fit()
+
+#view model summary
+print(model.summary())
+
+```
+
+## Pros of Linear Regression
+
+-   Very fast
+
+-   No parameter tuning
+
+-   Easy to understand, and highly interpretable
+
+## Model Evaluation in Regression Models
+
+-   Train and Test on same data
+
+-   Train/Test Split
+
+-   Regression Evaluation Metrics
+
+## What is training & Out-of-sample accuracy?
+
+This code snippet reads fuel consumption data, trains a linear regression model to predict CO2 emissions based on engine size, and evaluates the model's performance using mean squared error and R-squared metrics.
+
+```{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Read the CSV file and select numerical columns
+df = pd.read_csv('FuelConsumptionCo2.csv')
+numerical_df = df.select_dtypes(include=['float64', 'int64'])
+numerical_df = numerical_df.drop('MODELYEAR', axis=1)
+
+# Define the features and target variable
+X = numerical_df[['ENGINESIZE']]
+y = numerical_df['CO2EMISSIONS']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train the linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Calculate the mean squared error and R-squared value
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Display the coefficients and performance metrics
+print("Coefficient:", model.coef_[0])
+print("Intercept:", model.intercept_)
+print("Mean Squared Error:", mse)
+print("R-squared:", r2)
+```
+
+## Interpretations
+
+The linear regression model to predict CO2 emissions from engine size has been created. Here are the results:
+
+-   Coefficient: Coefficient: 38.992978724434074
+
+-   Intercept: Intercept: 126.28970217408721
+
+-   Mean Squared Error: Mean Squared Error: 985.9381692274999
+
+-   R-squared: R-squared: 0.7615595731934373
+
+The coefficient indicates that for each unit increase in engine size, the CO2 emissions increase by approximately 38.99 units. The R-squared value of 0.76 suggests that the model explains about 76% of the variance in CO2 emissions based on engine size.
+
+## How to use K-fold Cross-Validation?
+
+## Regression Accuracy Metrics
+
+-   MAE
+
+-   MSE
+
+-   RMSE
+
+## What is an error of the model?
+
+## Multiple Linear Regression
+
+More than one feature to predict the target variable.
+
+## Examples of MLR
+
+-   Independent variables effectiveness on prediction
+
+    -   Does revision time, test anxiety, lecture attendance and gender have any effect on the exam performance of students?
+
+-   Predicting impacts of changes
+
+    -   How much does blood pressure go up (or down) for every unit increase (or decrease) in the BMI of a patient? holding all other factors constant.
+
+## Predicting continuous values with MLR
+
+This code snippet trains a multiple linear regression model to predict CO2 emissions based on various vehicle features and evaluates its performance using mean squared error and R-squared metrics.
+
+```{python}
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Define the features and target variable
+X = numerical_df[['ENGINESIZE', 'CYLINDERS', 'FUELCONSUMPTION_CITY', 'FUELCONSUMPTION_HWY', 'FUELCONSUMPTION_COMB', 'FUELCONSUMPTION_COMB_MPG']]
+y = numerical_df['CO2EMISSIONS']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train the multiple linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Calculate the mean squared error and R-squared value
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+# Display the coefficients and performance metrics
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+print("Mean Squared Error:", mse)
+print("R-squared:", r2)
+```
+
+## Interpretations
+
+The multiple linear regression model to predict CO2 emissions from the specified features has been created. Here are the results:
+
+-   Coefficients: Coefficients: \[ 8.96115125 7.24023686 -13.00156667 -5.47215573 21.86697334 -4.03446041\]
+
+-   Intercept: Intercept: 262.5721608698735
+
+-   Mean Squared Error: Mean Squared Error: 399.41868891442704
+
+-   R-squared: R-squared: 0.9034041224574011
+
+The R-squared value of 0.90 suggests that the model explains about 90% of the variance in CO2 emissions based on the given features.

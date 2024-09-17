@@ -1,0 +1,70 @@
+---
+title: "Classification Problem"
+author: "Dr. Mighty Itauma"
+format: html
+editor: visual
+---
+
+## Week 3 Quiz
+
+```{python}
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
+
+# Load the dataset
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the k-NN model
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+
+# Predictions and accuracy
+y_pred = knn.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+```
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Train the Logistic Regression model
+log_reg = LogisticRegression(random_state=42)
+log_reg.fit(X_train, y_train)
+
+# Predictions and accuracy
+y_pred_log = log_reg.predict(X_test)
+accuracy_log = accuracy_score(y_test, y_pred_log)
+print("Logistic Regression Accuracy:", accuracy_log)
+
+```
+
+## Python Code Example for ROC Curve & AUC Value
+
+```{python}
+from sklearn.metrics import roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+# Assuming y_test and y_pred_proba (predicted probabilities from the model)
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+
+# Plotting the ROC curve
+plt.plot(fpr, tpr, label='ROC curve')
+plt.plot([0, 1], [0, 1], 'k--')  # Diagonal line for random guessing
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.show()
+
+# AUC Value
+auc_value = roc_auc_score(y_test, y_pred_proba)
+print(f'AUC Value: {auc_value:.2f}')
+
+```

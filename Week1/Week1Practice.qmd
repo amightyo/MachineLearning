@@ -1,0 +1,151 @@
+---
+title: "Data Visualization"
+author: "Dr. Itauma"
+format: html
+editor: visual
+---
+
+```{python}
+import plotly.express as px
+```
+
+Importing sample data from plotly express
+
+```{python}
+
+
+nz = px.data.gapminder().query("country=='New Zealand'")
+nz.head(3)
+```
+
+Introducing the Figure in Plotly
+
+```{python}
+
+# , title='New Zealand Population over Time'
+fig = px.bar(nz, x='year', y='pop', title='New Zealand Population over Time')
+print(fig)
+```
+
+```{python}
+fig.show()
+```
+
+```{python}
+print(fig)
+```
+
+```{python}
+print(fig.layout)
+```
+
+```{python}
+fig.layout.title = 'New Zealand Population over Time'
+```
+
+```{python}
+fig.update_layout(title_text="A New and Better Title", title_font_size=25)
+fig.show()
+```
+
+```{python}
+fig.update_layout(template='plotly_dark')
+fig.show()
+```
+
+```{python}
+iris = px.data.iris()
+iris.head(3)
+```
+
+Graphing with express
+
+```{python}
+fig = px.scatter(iris, x="sepal_width", y="sepal_length", title="Sepal Length vs Width")
+fig.show()
+```
+
+Overview of the Basic charts
+
+```{python}
+df = px.data.gapminder().query("continent=='Oceania'")
+df.head()
+```
+
+Line Graphs with Plotly
+
+```{python}
+fig=px.line(df, x="year", y="lifeExp", color='country')
+fig.show()
+```
+
+```{python}
+fig.update_layout(
+  legend=dict(
+    yanchor="top",
+    y=0.95,
+    xanchor="left",
+    x=0.01),
+  title = "Average Life Expectancy by Country"
+)
+#fig.update_traces(mode="markers")
+#fig.update_traces(mode="lines+markers")
+```
+
+```{python}
+fig.show()
+```
+
+Bar Graphs with Plotly
+
+```{python}
+fig = px.bar(df, x='year', y='pop', color='country')
+
+fig.show() #Stacked bargraph
+```
+
+```{python}
+
+fig = px.bar(df, x='year', y='pop', color='country', barmode='group')
+
+fig.show()
+```
+
+```{python}
+
+fig = px.bar(df, x='year', y='pop', color='country', barmode='group', category_orders={"country":["New Zealand", "Australia"]})
+
+fig.show()
+```
+
+```{python}
+####
+df = px.data.gapminder().query("year=='2007'")
+df.head()
+```
+
+```{python}
+fig=px.scatter(df, x="lifeExp", y="gdpPercap", color='country')
+fig.show()
+```
+
+```{python}
+fig=px.scatter(df, x="lifeExp", y="gdpPercap", color='country', size='pop')
+fig.show()
+```
+
+Statistical Charts with Plotly
+
+A simple histogram
+
+```{python}
+df = px.data.tips()
+df.head()
+```
+
+```{python}
+#,color='time'
+#,y='tip', hisfunc='avg'
+fig = px.histogram(df, x="total_bill")
+fig.show()
+```

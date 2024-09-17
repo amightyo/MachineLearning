@@ -1,0 +1,62 @@
+---
+title: "Multiple Regression Model"
+author: "Dr. Itauma"
+format: html
+editor: visual
+---
+
+## Quiz 2
+
+To create a linear regression model using scikit-learn, I will first load the dataset, preprocess it to select the relevant features (cylinders and fuel consumption), split the data into training and testing sets, and then train a linear regression model using a specific random seed for reproducibility. Let's proceed with this plan.
+
+This code snippet imports necessary libraries, loads a CSV file containing fuel consumption data into a pandas DataFrame, and displays the first few rows of the DataFrame.
+
+```{python}
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Load the dataset
+file_path = 'FuelConsumptionCo2.csv'
+df = pd.read_csv(file_path)
+
+# Display the first few rows of the dataframe
+df.head()
+```
+
+The dataset has been successfully loaded, and the relevant columns for our analysis, such as **`CYLINDERS`**, **`FUELCONSUMPTION_COMB`**, and **`CO2EMISSIONS`**, are present. I will now proceed to split the data into training and testing sets, and then train a linear regression model using a specific random seed.
+
+```{python}
+# Select relevant features and target variable
+X = df[['CYLINDERS', 'FUELCONSUMPTION_COMB']]
+y = df['CO2EMISSIONS']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train the linear regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Calculate the mean squared error
+mse = mean_squared_error(y_test, y_pred)
+
+# Print the model coefficients and mean squared error
+print('Coefficients:', model.coef_)
+print('Intercept:', model.intercept_)
+print('Mean Squared Error:', mse)
+```
+
+The linear regression model has been successfully trained, and the coefficients, intercept, and mean squared error have been calculated. The coefficients indicate the relationship between the features (cylinders and fuel consumption) and the target variable (CO2 emissions). The mean squared error provides a measure of the model's prediction accuracy.
+
+Here are the results:
+
+-   Coefficients: \[13.68900189 10.62240598\]
+
+-   Intercept: 54.25187946835115
+
+-   Mean Squared Error: 534.1219504949572
